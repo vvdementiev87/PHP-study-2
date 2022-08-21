@@ -1,0 +1,16 @@
+{
+    "name": "devavi/leveltwo",
+    "autoload": {
+        "psr-4": {
+            "devavi\\leveltwo\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "devavi"
+        }
+    ],
+    "require": {
+        "fakerphp/faker": "^1.20"
+    }
+}
