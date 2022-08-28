@@ -21,14 +21,12 @@ class SqliteCommentsRepository implements CommentsRepositoryInterface
 
     public function save(Comment $comment): void
     {
-
-        // Подготавливаем запрос
         $statement = $this->connection->prepare(
             'INSERT INTO comments (uuid, post_uuid, author_uuid, text) 
             VALUES (:uuid, :post_uuid, :author_uuid, :text)'
 
         );
-        // Выполняем запрос с конкретными значениями
+   
         $statement->execute([
             ':uuid' => (string)$comment->uuid(),
             ':post_uuid' => (string)$comment->post_uuid(),
@@ -38,12 +36,6 @@ class SqliteCommentsRepository implements CommentsRepositoryInterface
 
     }
 
-    // Также добавим метод для получения
-        // пользователя по его UUID
-    /**
-     * @throws UserNotFoundException
-     * @throws InvalidArgumentException
-     */
     public function get(UUID $uuid): Comment
     {
         $statement = $this->connection->prepare(
@@ -51,21 +43,10 @@ class SqliteCommentsRepository implements CommentsRepositoryInterface
         );
 
         $statement->execute([(string)$uuid]);
-        $result = $statement->fetch(PDO::FETCH_ASSOC);
-
-        // Бросаем исключение, если пользователь не найден
-        if ($result === false) {
-            throw new CommentNotFoundException(
-                "Cannot get Comment: $uuid"
-            );
-        }
+       
         return $this->getComment($statement, $uuid);
     }
 
-    /**
-     * @throws UserNotFoundException
-     * @throws InvalidArgumentException
-     */
     private function getComment(PDOStatement $statement, string $errorString): Comment
     {
         $result = $statement->fetch(\PDO::FETCH_ASSOC);
@@ -74,7 +55,7 @@ class SqliteCommentsRepository implements CommentsRepositoryInterface
                 "Cannot find comment: $errorString"
             );
         }
-        // Создаём объект пользователя с полем username
+
         return new Comment(
             new UUID($result['uuid']),
             new UUID($result['post_uuid']),

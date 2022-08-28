@@ -43,13 +43,7 @@ class SqlitePostsRepository implements PostsRepositoryInterface
         );
 
         $statement->execute([(string)$uuid]);
-        $result = $statement->fetch(PDO::FETCH_ASSOC);
-
-        if ($result === false) {
-            throw new PostNotFoundException(
-                "Cannot get post: $uuid"
-            );
-        }
+        
         return $this->getPost($statement, $uuid);
     }
 

@@ -50,7 +50,7 @@ switch ($route) {
         break;
 
     default:
-        echo "error try user post comment parametr";
+        echo "error try user post comment parameter";
 }
 
 
