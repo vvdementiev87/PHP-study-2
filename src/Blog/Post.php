@@ -3,22 +3,22 @@ namespace devavi\leveltwo\Blog;
 
 class Post {
     
-    private UUID $uuid;
-    private UUID $author_uuid;
-    private string $title;
-    private string $text;
+    private UUID    $uuid;
+    private User    $user;
+    private string  $title;
+    private string  $text;
 
-    public function __construct(UUID $uuid, UUID $author_uuid, string $title, string $text)
+    public function __construct(UUID $uuid, User $user, string $title, string $text)
     {
         $this->uuid = $uuid;
-        $this->author_uuid = $author_uuid;
+        $this->user = $user;
         $this->title = $title;
         $this->text = $text;
     }
 
     public function __toString(): string
     {
-        return "Юзер $this->author_uuid написал пост номер $this->uuid с заголовком: $this->title и текстом: $this->text" . PHP_EOL;
+        return "Юзер $this->user написал пост номер $this->uuid с заголовком: $this->title и текстом: $this->text" . PHP_EOL;
     }
 
     public function uuid(): UUID
@@ -26,9 +26,9 @@ class Post {
         return $this->uuid;
     }
 
-    public function author_uuid(): UUID
+    public function user(): User
     {
-        return $this->author_uuid;
+        return $this->user;
     }
 
     public function title(): string

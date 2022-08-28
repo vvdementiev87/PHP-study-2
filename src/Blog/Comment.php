@@ -4,15 +4,15 @@ namespace devavi\leveltwo\Blog;
 class Comment {
     
     private UUID $uuid;
-    private UUID $post_uuid;
-    private UUID $author_uuid;
+    private User $user;
+    private Post $post;
     private string $text;
 
-    public function __construct(UUID $uuid, UUID $post_uuid, UUID $author_uuid, string $text)
+    public function __construct(UUID $uuid, User $user, Post $post, string $text)
     {
         $this->uuid = $uuid;
-        $this->post_uuid = $post_uuid;
-        $this->author_uuid = $author_uuid;
+        $this->user = $user;
+        $this->post = $post;
         $this->text = $text;
     }
 
@@ -26,14 +26,14 @@ class Comment {
         return $this->uuid;
     }
 
-    public function post_uuid(): UUID
+    public function post(): Post
     {
-        return $this->post_uuid;
+        return $this->post;
     }
 
-    public function author_uuid(): UUID
+    public function user(): User
     {
-        return $this->author_uuid;
+        return $this->user;
     }
     
     public function text(): string

@@ -29,14 +29,14 @@ class CreatePostCommand
         $username = $arguments->get('username');
 
         if ($this->userExists($username)) {
-           $author_uuid = $this->usersRepository->getByUsername($username)->uuid();
+           $user = $this->usersRepository->getByUsername($username);
         } else {
             throw new UserNotFoundException("User not found: $username");
         }
         
         $this->postsRepository->save(new Post(
             UUID::random(),
-            $author_uuid,
+            $user,
             $arguments->get('title'),
             $arguments->get('text')
         ));

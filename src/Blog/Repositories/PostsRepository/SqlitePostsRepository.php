@@ -2,6 +2,7 @@
 
 namespace devavi\leveltwo\Blog\Repositories\PostsRepository;
 
+use devavi\leveltwo\Blog\Repositories\UsersRepository\SqliteUsersRepository;
 use devavi\leveltwo\Blog\Exceptions\InvalidArgumentException;
 use devavi\leveltwo\Blog\Exceptions\PostNotFoundException;
 use devavi\leveltwo\Blog\Post;
@@ -29,7 +30,7 @@ class SqlitePostsRepository implements PostsRepositoryInterface
         );
         $statement->execute([
             ':uuid' => (string)$post->uuid(),
-            ':author_uuid' => (string)$post->author_uuid(),
+            ':author_uuid' => (string)$post->user()->uuid(),
             ':title' => $post->title(),
             ':text' => $post->text(),
         ]);
@@ -39,11 +40,12 @@ class SqlitePostsRepository implements PostsRepositoryInterface
     public function get(UUID $uuid): Post
     {
         $statement = $this->connection->prepare(
-            'SELECT * FROM posts WHERE uuid = ?'
+            'SELECT * FROM posts WHERE uuid = :uuid'
         );
+        $statement->execute([
+            ':uuid' => (string)$uuid,
+        ]);
 
-        $statement->execute([(string)$uuid]);
-        
         return $this->getPost($statement, $uuid);
     }
 
@@ -56,9 +58,12 @@ class SqlitePostsRepository implements PostsRepositoryInterface
             );
         }
 
+        $userRepository = new SqliteUsersRepository($this->connection);
+        $user = $userRepository->get(new UUID($result['author_uuid']));
+
         return new Post(
             new UUID($result['uuid']),
-            new UUID($result['author_uuid']),
+            $user,
             $result['title'],
             $result['text']
         );

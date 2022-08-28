@@ -7,11 +7,17 @@ use devavi\leveltwo\Blog\Command\CreateCommentCommand;
 use devavi\leveltwo\Blog\Repositories\UsersRepository\SqliteUsersRepository;
 use devavi\leveltwo\Blog\Repositories\PostsRepository\SqlitePostsRepository;
 use devavi\leveltwo\Blog\Repositories\CommentsRepository\SqliteCommentsRepository;
+use devavi\leveltwo\Blog\UUID;
 
 include __DIR__ . "/vendor/autoload.php";
 
 //Создаём объект подключения к SQLite
 $connection = new PDO('sqlite:' . __DIR__ . '/blog.sqlite');
+
+$postsRepository = new SqlitePostsRepository($connection);
+var_dump($postsRepository->get(new UUID('cd3e7bf6-4cf8-4460-a7c3-0ba1836ceabd')));
+
+die();
 
 $route = $argv[1];
 

@@ -2,7 +2,8 @@
 
 namespace devavi\leveltwo\Blog\Repositories\CommentsRepository;
 
-use devavi\leveltwo\Blog\Exceptions\InvalidArgumentException;
+use devavi\leveltwo\Blog\Repositories\UsersRepository\SqliteUsersRepository;
+use devavi\leveltwo\Blog\Repositories\PostsRepository\SqlitePostsRepository;
 use devavi\leveltwo\Blog\Exceptions\CommentNotFoundException;
 use devavi\leveltwo\Blog\Comment;
 use devavi\leveltwo\Blog\UUID;
@@ -29,8 +30,8 @@ class SqliteCommentsRepository implements CommentsRepositoryInterface
    
         $statement->execute([
             ':uuid' => (string)$comment->uuid(),
-            ':post_uuid' => (string)$comment->post_uuid(),
-            ':author_uuid' => (string)$comment->author_uuid(),
+            ':post_uuid' => (string)$comment->post()->uuid(),
+            ':author_uuid' => (string)$comment->user()->uuid(),
             ':text' => $comment->text(),
         ]);
 
@@ -56,10 +57,14 @@ class SqliteCommentsRepository implements CommentsRepositoryInterface
             );
         }
 
+        
+        $postRepository = new SqlitePostsRepository($this->connection);
+        $post = $postRepository->get(new UUID($result['post_uuid']));
+
         return new Comment(
-            new UUID($result['uuid']),
-            new UUID($result['post_uuid']),
-            new UUID($result['author_uuid']),
+            new UUID($result['uuid']),           
+            $post->user(),
+            $post,
             $result['text']
         );
     }
