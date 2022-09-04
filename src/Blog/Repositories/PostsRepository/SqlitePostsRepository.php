@@ -3,7 +3,6 @@
 namespace devavi\leveltwo\Blog\Repositories\PostsRepository;
 
 use devavi\leveltwo\Blog\Repositories\UsersRepository\SqliteUsersRepository;
-use devavi\leveltwo\Blog\Exceptions\InvalidArgumentException;
 use devavi\leveltwo\Blog\Exceptions\PostNotFoundException;
 use devavi\leveltwo\Blog\Post;
 use devavi\leveltwo\Blog\UUID;
@@ -67,5 +66,16 @@ class SqlitePostsRepository implements PostsRepositoryInterface
             $result['title'],
             $result['text']
         );
+    }
+
+    public function delete(UUID $uuid): void
+    {
+        $statement = $this->connection->prepare(
+            'DELETE FROM posts WHERE posts.uuid=:uuid;'
+        );
+
+        $statement->execute([
+            ':uuid' => $uuid,
+        ]);
     }
 }
