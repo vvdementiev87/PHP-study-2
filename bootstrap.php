@@ -5,6 +5,8 @@ use devavi\leveltwo\Blog\Repositories\PostsRepository\PostsRepositoryInterface;
 use devavi\leveltwo\Blog\Repositories\PostsRepository\SqlitePostsRepository;
 use devavi\leveltwo\Blog\Repositories\UsersRepository\SqliteUsersRepository;
 use devavi\leveltwo\Blog\Repositories\UsersRepository\UsersRepositoryInterface;
+use devavi\leveltwo\Blog\Repositories\LikesRepository\LikesRepositoryInterface;
+use devavi\leveltwo\Blog\Repositories\LikesRepository\SqliteLikesRepository;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -23,6 +25,11 @@ $container->bind(
 $container->bind(
     UsersRepositoryInterface::class,
     SqliteUsersRepository::class
+);
+
+$container->bind(
+    LikesRepositoryInterface::class,
+    SqliteLikesRepository::class
 );
 
 return $container;

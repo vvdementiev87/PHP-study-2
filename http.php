@@ -10,8 +10,8 @@ use devavi\leveltwo\Http\Request;
 use devavi\leveltwo\Http\Actions\Posts\FindByUuid;
 use devavi\leveltwo\Http\Actions\Posts\CreatePost;
 use devavi\leveltwo\Http\Actions\Posts\DeletePost;
+use devavi\leveltwo\Http\Actions\Likes\CreatePostLike;
 use devavi\leveltwo\Http\Actions\Comments\CreateComment;
-use devavi\leveltwo\Blog\Repositories\CommentsRepository\SqliteCommentsRepository;
 
 $container = require __DIR__ . '/bootstrap.php';
 
@@ -48,6 +48,8 @@ $routes = [
         '/users/create' => CreateUser::class,
         '/posts/create' => CreatePost::class,
         '/posts/comment' => CreateComment::class,
+        '/posts/likes/create' => CreatePostLike::class,
+        //{"user_uuid": "e6602945-4049-49b2-bb0b-728a751d6455", "post_uuid": "c29391e3-df21-4201-9282-d3543613da57"}
 
     ],
     'DELETE' => [
