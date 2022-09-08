@@ -54,8 +54,8 @@ class CreatePostLike implements ActionInterface
 
         $like = new Like(
             uuid: $newLikeUuid,
-            post_id: new UUID($postUuid),
-            user_id: new UUID($userUuid),
+            post_uuid: new UUID($postUuid),
+            user_uuid: new UUID($userUuid),
 
         );
 

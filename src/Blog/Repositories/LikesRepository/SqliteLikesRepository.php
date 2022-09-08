@@ -27,8 +27,8 @@ class SqliteLikesRepository implements LikesRepositoryInterface
 
         $statement->execute([
             ':uuid' => (string)$like->uuid(),
-            ':user_uuid' => (string)$like->UserId(),
-            ':post_uuid' => (string)$like->PostId(),
+            ':user_uuid' => (string)$like->userUuid(),
+            ':post_uuid' => (string)$like->postUuid(),
         ]);
     }
 
@@ -58,8 +58,8 @@ class SqliteLikesRepository implements LikesRepositoryInterface
         foreach ($result as $like) {
             $likes[] = new Like(
                 uuid: new UUID($like['uuid']),
-                post_id: new UUID($like['post_uuid']),
-                user_id: new UUID($like['user_uuid']),
+                post_uuid: new UUID($like['post_uuid']),
+                user_uuid: new UUID($like['user_uuid']),
             );
         }
 

@@ -6,8 +6,8 @@ class Like
 {
     public function __construct(
         private UUID $uuid,
-        private UUID $post_id,
-        private UUID $user_id,
+        private UUID $post_uuid,
+        private UUID $user_uuid,
     ) {
     }
 
@@ -30,32 +30,32 @@ class Like
     /**
      * @return UUID
      */
-    public function PostId(): UUID
+    public function postUuid(): UUID
     {
-        return $this->post_id;
+        return $this->post_uuid;
     }
 
     /**
      * @param UUID $post_id
      */
-    public function setPostId(UUID $post_id): void
+    public function setPostId(UUID $post_uuid): void
     {
-        $this->post_id = $post_id;
+        $this->post_uuid = $post_uuid;
     }
 
     /**
      * @return UUID
      */
-    public function UserId(): UUID
+    public function userUuid(): UUID
     {
-        return $this->user_id;
+        return $this->user_uuid;
     }
 
     /**
      * @param UUID $user_id
      */
-    public function setUserId(UUID $user_id): void
+    public function setUserId(UUID $user_uuid): void
     {
-        $this->user_id = $user_id;
+        $this->user_uuid = $user_uuid;
     }
 }
