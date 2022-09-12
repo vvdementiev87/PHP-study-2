@@ -2,12 +2,15 @@
 
 namespace devavi\Blog\UnitTests\Container;
 
+use PHPUnit\Framework\TestCase;
 use devavi\leveltwo\Blog\Container\DIContainer;
 use devavi\leveltwo\Blog\Exceptions\NotFoundException;
-use devavi\leveltwo\Blog\Repositories\UsersRepository\UsersRepositoryInterface;
-use devavi\leveltwo\Blog\Repositories\UsersRepository\InMemoryUsersRepository;
+use devavi\leveltwo\UnitTests\Container\ClassDependingOnAnother;
 
-use PHPUnit\Framework\TestCase;
+use devavi\leveltwo\UnitTests\Container\SomeClassWithParameter;
+use devavi\leveltwo\UnitTests\Container\SomeClassWithoutDependencies;
+use devavi\leveltwo\Blog\Repositories\UsersRepository\InMemoryUsersRepository;
+use devavi\leveltwo\Blog\Repositories\UsersRepository\UsersRepositoryInterface;
 
 class DIContainerTest extends TestCase
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace devavi\Blog\UnitTests\Container;
+namespace devavi\leveltwo\UnitTests\Container;
 
 class SomeClassWithoutDependencies
 {
