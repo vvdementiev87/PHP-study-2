@@ -4,6 +4,7 @@
 use Psr\Log\LoggerInterface;
 use devavi\leveltwo\Http\Request;
 use devavi\leveltwo\Http\ErrorResponse;
+use devavi\leveltwo\Http\Actions\Auth\LogIn;
 use devavi\leveltwo\Blog\Exceptions\AppException;
 use devavi\leveltwo\Blog\Exceptions\HttpException;
 use devavi\leveltwo\Http\Actions\Posts\CreatePost;
