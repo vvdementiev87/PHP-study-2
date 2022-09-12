@@ -2,21 +2,24 @@
 
 namespace devavi\leveltwo\Blog\Repositories\UsersRepository;
 
-use devavi\leveltwo\Blog\Exceptions\InvalidArgumentException;
-use devavi\leveltwo\Blog\Exceptions\UserNotFoundException;
+use \PDO;
+use \PDOStatement;
+use Psr\Log\LoggerInterface;
 use devavi\leveltwo\Blog\User;
 use devavi\leveltwo\Blog\UUID;
 use devavi\leveltwo\Person\Name;
-use \PDO;
-use \PDOStatement;
+use devavi\leveltwo\Blog\Exceptions\UserNotFoundException;
+use devavi\leveltwo\Blog\Exceptions\InvalidArgumentException;
 
 class SqliteUsersRepository implements UsersRepositoryInterface
 {
     private PDO $connection;
+    private LoggerInterface $logger;
 
-    public function __construct(PDO $connection)
+    public function __construct(PDO $connection, LoggerInterface $logger)
     {
         $this->connection = $connection;
+        $this->logger = $logger;
     }
 
 
@@ -36,11 +39,11 @@ class SqliteUsersRepository implements UsersRepositoryInterface
             ':uuid' => (string)$user->uuid(),
             ':username' => $user->username(),
         ]);
-
+        $this->logger->info("User created successfully: {$user->uuid()}");
     }
 
     // Также добавим метод для получения
-        // пользователя по его UUID
+    // пользователя по его UUID
     /**
      * @throws UserNotFoundException
      * @throws InvalidArgumentException
@@ -69,7 +72,7 @@ class SqliteUsersRepository implements UsersRepositoryInterface
             ':username' => $username,
         ]);
 
-       return $this->getUser($statement, $username);
+        return $this->getUser($statement, $username);
     }
 
     /**
@@ -80,9 +83,9 @@ class SqliteUsersRepository implements UsersRepositoryInterface
     {
         $result = $statement->fetch(\PDO::FETCH_ASSOC);
         if ($result === false) {
-            throw new UserNotFoundException(
-                "Cannot find user: $errorString"
-            );
+            $message = "Cannot find user: $errorString";
+            $this->logger->warning($message);
+            throw new UserNotFoundException($message);
         }
         // Создаём объект пользователя с полем username
         return new User(
