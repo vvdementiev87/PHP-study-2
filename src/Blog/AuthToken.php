@@ -16,6 +16,11 @@ class AuthToken
     ) {
     }
 
+    public function setExpiresOn(DateTimeImmutable $expiresOn): void
+    {
+        $this->expiresOn = $expiresOn;
+    }
+
     public function token(): string
     {
         return $this->token;

@@ -18,6 +18,8 @@ use devavi\leveltwo\Blog\Repositories\UsersRepository\SqliteUsersRepository;
 use devavi\leveltwo\Blog\Repositories\LikesRepository\LikesRepositoryInterface;
 use devavi\leveltwo\Blog\Repositories\PostsRepository\PostsRepositoryInterface;
 use devavi\leveltwo\Blog\Repositories\UsersRepository\UsersRepositoryInterface;
+use devavi\leveltwo\Blog\Repositories\CommentsRepository\SqliteCommentsRepository;
+use devavi\leveltwo\Blog\Repositories\CommentsRepository\CommentsRepositoryInterface;
 use devavi\leveltwo\Blog\Repositories\AuthTokensRepository\SqliteAuthTokensRepository;
 use devavi\leveltwo\Blog\Repositories\AuthTokensRepository\AuthTokensRepositoryInterface;
 
@@ -55,6 +57,11 @@ if ('yes' === $_ENV['LOG_TO_CONSOLE']) {
         new StreamHandler("php://stdout")
     );
 }
+
+$container->bind(
+    CommentsRepositoryInterface::class,
+    SqliteCommentsRepository::class
+);
 
 $container->bind(
     PostsRepositoryInterface::class,
