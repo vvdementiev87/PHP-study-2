@@ -2,19 +2,21 @@
 
 namespace devavi\leveltwo\Http\Actions\Comments;
 
-use devavi\leveltwo\Blog\Exceptions\InvalidArgumentException;
-use devavi\leveltwo\Http\Actions\ActionInterface;
-use devavi\leveltwo\Http\ErrorResponse;
-use devavi\leveltwo\Blog\Exceptions\HttpException;
+use devavi\leveltwo\Blog\UUID;
+use devavi\leveltwo\Blog\Comment;
 use devavi\leveltwo\Http\Request;
 use devavi\leveltwo\Http\Response;
+use devavi\leveltwo\Http\ErrorResponse;
 use devavi\leveltwo\http\SuccessfulResponse;
-use devavi\leveltwo\Blog\Comment;
-use devavi\leveltwo\Blog\Repositories\PostsRepository\PostsRepositoryInterface;
-use devavi\leveltwo\Blog\Exceptions\UserNotFoundException;
+use devavi\leveltwo\Http\Actions\ActionInterface;
+use devavi\leveltwo\Blog\Exceptions\AuthException;
+use devavi\leveltwo\Blog\Exceptions\HttpException;
 use devavi\leveltwo\Blog\Exceptions\PostNotFoundException;
+use devavi\leveltwo\Blog\Exceptions\UserNotFoundException;
+use devavi\leveltwo\Http\Auth\TokenAuthenticationInterface;
+use devavi\leveltwo\Blog\Exceptions\InvalidArgumentException;
+use devavi\leveltwo\Blog\Repositories\PostsRepository\PostsRepositoryInterface;
 use devavi\leveltwo\Blog\Repositories\UsersRepository\UsersRepositoryInterface;
-use devavi\leveltwo\Blog\UUID;
 use devavi\leveltwo\Blog\Repositories\CommentsRepository\CommentsRepositoryInterface;
 
 class CreateComment implements ActionInterface
@@ -22,20 +24,15 @@ class CreateComment implements ActionInterface
     public function __construct(
         private CommentsRepositoryInterface $commentsRepository,
         private PostsRepositoryInterface $postsRepository,
-        private UsersRepositoryInterface $usersRepository,
+        private TokenAuthenticationInterface $authentication,
     ) {
     }
     public function handle(Request $request): Response
     {
         try {
-            $authorUuid = new UUID($request->jsonBodyField('author_uuid'));
-        } catch (HttpException | InvalidArgumentException $e) {
-            return new ErrorResponse($e->getMessage());
-        }
-        try {
-            $user = $this->usersRepository->get($authorUuid);
-        } catch (UserNotFoundException $e) {
-            return new ErrorResponse($e->getMessage());
+            $author = $this->authentication->user($request);
+        } catch (AuthException $exception) {
+            return new ErrorResponse($exception->getMessage());
         }
 
         try {
@@ -51,10 +48,11 @@ class CreateComment implements ActionInterface
         }
 
         $newCommentUuid = UUID::random();
+
         try {
             $comment = new Comment(
                 $newCommentUuid,
-                $user,
+                $author,
                 $post,
                 $request->jsonBodyField('text'),
             );

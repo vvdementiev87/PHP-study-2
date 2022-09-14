@@ -4,6 +4,8 @@
 use Psr\Log\LoggerInterface;
 use devavi\leveltwo\Http\Request;
 use devavi\leveltwo\Http\ErrorResponse;
+use devavi\leveltwo\Http\Actions\Auth\LogIn;
+use devavi\leveltwo\Http\Actions\Auth\LogOut;
 use devavi\leveltwo\Blog\Exceptions\AppException;
 use devavi\leveltwo\Blog\Exceptions\HttpException;
 use devavi\leveltwo\Http\Actions\Posts\CreatePost;
@@ -47,9 +49,11 @@ $routes = [
     ],
     'POST' => [
         '/login' => LogIn::class,
+        '/logout' => LogOut::class,
         '/users/create' => CreateUser::class,
         '/posts/create' => CreatePost::class,
-        '/post-likes/create' => CreatePostLike::class,
+        '/comments/create' => CreateComment::class,
+        '/posts/likes/create' => CreatePostLike::class,
     ],
     'DELETE' => [
         '/posts' => DeletePost::class,

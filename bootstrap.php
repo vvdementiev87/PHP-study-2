@@ -5,13 +5,23 @@ use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 use Monolog\Handler\StreamHandler;
 use devavi\leveltwo\Blog\Container\DIContainer;
-use devavi\leveltwo\Blog\Command\CreateUserCommand;
+use devavi\leveltwo\Http\Auth\PasswordAuthentication;
+use devavi\leveltwo\Http\Auth\AuthenticationInterface;
+use devavi\leveltwo\Http\Auth\IdentificationInterface;
+use devavi\leveltwo\Http\Auth\BearerTokenAuthentication;
+use devavi\leveltwo\Http\Auth\TokenAuthenticationInterface;
+use devavi\leveltwo\Http\Auth\JsonBodyUsernameIdentification;
+use devavi\leveltwo\Http\Auth\PasswordAuthenticationInterface;
 use devavi\leveltwo\Blog\Repositories\LikesRepository\SqliteLikesRepository;
 use devavi\leveltwo\Blog\Repositories\PostsRepository\SqlitePostsRepository;
 use devavi\leveltwo\Blog\Repositories\UsersRepository\SqliteUsersRepository;
 use devavi\leveltwo\Blog\Repositories\LikesRepository\LikesRepositoryInterface;
 use devavi\leveltwo\Blog\Repositories\PostsRepository\PostsRepositoryInterface;
 use devavi\leveltwo\Blog\Repositories\UsersRepository\UsersRepositoryInterface;
+use devavi\leveltwo\Blog\Repositories\CommentsRepository\SqliteCommentsRepository;
+use devavi\leveltwo\Blog\Repositories\CommentsRepository\CommentsRepositoryInterface;
+use devavi\leveltwo\Blog\Repositories\AuthTokensRepository\SqliteAuthTokensRepository;
+use devavi\leveltwo\Blog\Repositories\AuthTokensRepository\AuthTokensRepositoryInterface;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -49,6 +59,11 @@ if ('yes' === $_ENV['LOG_TO_CONSOLE']) {
 }
 
 $container->bind(
+    CommentsRepositoryInterface::class,
+    SqliteCommentsRepository::class
+);
+
+$container->bind(
     PostsRepositoryInterface::class,
     SqlitePostsRepository::class
 );
@@ -67,6 +82,31 @@ $container->bind(
     LoggerInterface::class,
     $logger
 
+);
+
+$container->bind(
+    TokenAuthenticationInterface::class,
+    BearerTokenAuthentication::class
+);
+
+
+$container->bind(
+    PasswordAuthenticationInterface::class,
+    PasswordAuthentication::class
+);
+$container->bind(
+    AuthTokensRepositoryInterface::class,
+    SqliteAuthTokensRepository::class
+);
+
+$container->bind(
+    AuthenticationInterface::class,
+    PasswordAuthentication::class
+);
+
+$container->bind(
+    IdentificationInterface::class,
+    JsonBodyUsernameIdentification::class
 );
 
 
